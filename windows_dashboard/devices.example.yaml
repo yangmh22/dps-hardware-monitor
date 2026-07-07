@@ -1,0 +1,37 @@
+devices:
+  - id: demo-cpu-01
+    name: Demo CPU Node
+    local: true
+    remote_file: examples/demo-cpu-01.metrics.jsonl
+
+  - id: demo-gpu-01
+    name: Demo GPU Node
+    local: true
+    remote_file: examples/demo-gpu-01.metrics.jsonl
+
+  - id: demo-edge-01
+    name: Demo Edge Node
+    local: true
+    remote_file: examples/demo-edge-01.metrics.jsonl
+
+  # SSH example. Copy this file to devices.yaml and replace placeholders.
+  # - id: remote-linux-01
+  #   name: Remote Linux Node
+  #   host: <HOST_OR_IP>
+  #   user: <SSH_USER>
+  #   port: 22
+  #   key_file: <ABSOLUTE_PATH_TO_PRIVATE_KEY>
+  #   remote_file: /opt/dps-hardware-monitor/logs/metrics.jsonl
+  #
+  # Jump-host example.
+  # - id: internal-node-01
+  #   name: Internal Node
+  #   host: <INTERNAL_HOST_OR_IP>
+  #   user: <SSH_USER>
+  #   port: 22
+  #   key_file: <ABSOLUTE_PATH_TO_PRIVATE_KEY>
+  #   remote_file: /opt/dps-hardware-monitor/logs/metrics.jsonl
+  #   jump_host: <JUMP_HOST_OR_IP>
+  #   jump_user: <JUMP_SSH_USER>
+  #   jump_port: 22
+  #   jump_key_file: <ABSOLUTE_PATH_TO_JUMP_PRIVATE_KEY>

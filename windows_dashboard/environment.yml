@@ -1,0 +1,21 @@
+# Conda env for the Windows dashboard backend (Flask + SSH collector).
+# Create:  conda env create -f environment.yml
+# Update: conda env update -f environment.yml --prune
+name: hwmon-dashboard
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - Flask==3.1.0
+      - paramiko==3.5.0
+      - PyYAML==6.0.2
+      # 本机采样 daemon_writer.py / monitor.py
+      - psutil==6.1.1
+      - rich==13.9.4
+      # NVIDIA GPU（NVML）；无 N 卡或未装驱动时 nvmlInit 会失败，可保留包不动
+      - nvidia-ml-py
+      # Windows CPU 温度：WMI ACPI / LibreHardwareMonitor；未安装则温度仍为 N/A
+      - pywin32
+      - WMI

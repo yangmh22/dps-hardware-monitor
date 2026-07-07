@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.env
+
+# Runtime data
+*.log
+*.jsonl
+email_logs.txt
+logs/
+status_history_cache.json
+windows_dashboard/devices.yaml
+windows_dashboard/status_history_cache.json
+windows_dashboard/logs/
+
+# Local/editor
+.vscode/
+.idea/
+.DS_Store
+
+# Secrets
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+known_hosts

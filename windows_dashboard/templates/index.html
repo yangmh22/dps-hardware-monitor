@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>System Monitor Dashboard</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dark-theme">
+  <!-- Dynamic animated background -->
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
+  
+  <div class="dashboard-layout">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar glass-panel">
+      
+      <!-- BRAND / LOGO -->
+      <header class="sidebar-header">
+        <div class="brand">
+          <div class="status-dot pulse"></div>
+          <h1>System Pulse</h1>
+        </div>
+        <div id="statusText" class="status-badge text-sm">Initialize...</div>
+      </header>
+
+      <!-- CONTROLS -->
+      <section class="sidebar-controls">
+        <div class="control-group block view-container">
+          <label>View</label>
+          <div class="view-group">
+            <button id="statusOverviewBtn" class="view-btn active" type="button">状态总览</button>
+            <button id="deviceDetailBtn" class="view-btn" type="button">设备详情</button>
+          </div>
+        </div>
+        <div class="control-group block range-container">
+          <label>History Range</label>
+          <div class="range-group">
+            <button data-range="30m" class="range-btn">30 min</button>
+            <button data-range="1h" class="range-btn active">1 Hour</button>
+            <button data-range="1d" class="range-btn">1 Day</button>
+            <button data-range="1w" class="range-btn">1 Week</button>
+            <button data-range="1m" class="range-btn">1 Month</button>
+          </div>
+        </div>
+        
+        <button id="refreshBtn" class="btn-primary w-full">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Force Refresh
+        </button>
+      </section>
+
+      <!-- OVERVIEW CARDS (Global Status) -->
+      <section class="sidebar-overview fade-in delay-1">
+        <h2 class="section-title text-sm">Cluster State</h2>
+        <div id="overviewCards" class="overview-list"></div>
+      </section>
+
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT -->
+    <main class="main-area">
+
+      <div id="statusOverviewView" class="view-panel">
+        <section class="section-block slide-up delay-1">
+          <div class="overview-hero glass-panel">
+            <div>
+              <h2>状态总览</h2>
+              <p id="statusOverviewMeta">Loading one-day history...</p>
+            </div>
+            <div id="statusOverviewCounts" class="overview-counts"></div>
+          </div>
+        </section>
+
+        <section class="section-block slide-up delay-2">
+          <h2 class="section-title">告警信息</h2>
+          <div id="statusAlertList" class="status-alert-list glass-panel"></div>
+        </section>
+
+        <section class="section-block slide-up delay-3">
+          <h2 class="section-title">所有设备 24h 状态</h2>
+          <div id="statusDeviceList" class="status-device-list"></div>
+        </section>
+      </div>
+
+      <div id="deviceDetailView" class="view-panel hidden">
+      <!-- TOP METRIC CARDS OVERVIEW (for the chosen node) -->
+      <div class="summary-cards slide-up delay-1">
+        <div id="summary" class="info-summary glass-panel"></div>
+        <div id="userSummary" class="info-summary glass-panel"></div>
+      </div>
+
+      <!-- CHARTS SECTION -->
+      <section class="section-block slide-up delay-2">
+        <h2 class="section-title">Core Performance Metrics</h2>
+        <div class="main-chart-grid">
+          <div class="chart-card glass-panel zoom-in">
+            <div class="chart-header">
+              <h3>CPU Usage</h3>
+              <span class="metric-unit">%</span>
+            </div>
+            <div class="canvas-wrapper"><canvas id="cpuChart"></canvas></div>
+          </div>
+          <div class="chart-card glass-panel zoom-in delay-ms1">
+            <div class="chart-header">
+              <h3>Memory Usage</h3>
+              <span class="metric-unit">%</span>
+            </div>
+            <div class="canvas-wrapper"><canvas id="memChart"></canvas></div>
+          </div>
+          <div class="chart-card glass-panel zoom-in delay-ms2">
+            <div class="chart-header">
+              <h3>GPU Usage</h3>
+              <span class="metric-unit">%</span>
+            </div>
+            <div class="canvas-wrapper"><canvas id="gpuChart"></canvas></div>
+          </div>
+          <div class="chart-card glass-panel zoom-in delay-ms3">
+            <div class="chart-header">
+              <h3>Temperature</h3>
+              <span class="metric-unit">°C</span>
+            </div>
+            <div class="canvas-wrapper"><canvas id="tempChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block slide-up delay-3">
+        <h2 class="section-title">I/O Activity</h2>
+        <div class="wide-chart-grid">
+          <div class="chart-card glass-panel zoom-in">
+            <div class="chart-header">
+              <h3>Disk Analytics</h3>
+              <span class="metric-unit">MB/s</span>
+            </div>
+            <div class="canvas-wrapper"><canvas id="diskChart"></canvas></div>
+          </div>
+          <div class="chart-card glass-panel zoom-in delay-ms1">
+            <div class="chart-header">
+              <h3>Network Analytics</h3>
+              <span class="metric-unit">KB/s</span>
+            </div>
+            <div class="canvas-wrapper"><canvas id="netChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block slide-up delay-4">
+        <h2 class="section-title">Storage Volumes Topology</h2>
+        <div id="diskMeta" class="info-summary disk-meta glass-panel text-sm mb-4"></div>
+        <div id="diskBars" class="disk-grid"></div>
+      </section>
+      </div>
+
+    </main>
+
+  </div>
+  
+  <!-- Chart.js -->
+  <script src="{{ url_for('static', filename='chart.umd.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

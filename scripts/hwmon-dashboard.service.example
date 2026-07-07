@@ -1,0 +1,16 @@
+[Unit]
+Description=DPS hardware monitor web dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/dps-hardware-monitor/windows_dashboard
+Environment=PYTHONUNBUFFERED=1
+Environment=DASHBOARD_CONFIG=/etc/dps-hardware-monitor/devices.yaml
+Environment=DASHBOARD_ENABLE_ALERTER=0
+ExecStart=/opt/miniconda3/bin/conda run --no-capture-output -n hwmon-dashboard python /opt/dps-hardware-monitor/windows_dashboard/app.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
